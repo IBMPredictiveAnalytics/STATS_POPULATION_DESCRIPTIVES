@@ -1,0 +1,9 @@
+Name: STATS POPULATION DESCRIPTIVES
+Dialog-Specs: STATS_POPULATION_DESCRIPTIVES.spd
+Summary:  Descriptive Statistics for a Population
+Description: Computes descriptive statistics assuming that data repres
+ ent an entire population rather than a sample (uses N instead of N-1 
+ in denominator to compute standard deviations and variances).
+Author: David Nichols
+Version: 1.0.0
+Product-Version: 18
