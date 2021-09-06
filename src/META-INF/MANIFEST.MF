@@ -6,7 +6,7 @@ Description: Computes descriptive statistics assuming that data repres
  ent an entire population rather than a sample (uses N instead of N-1 
  in denominator to compute standard deviations and variances).
 Author: David Nichols
-Version: 2.0.0
+Version: 2.0.1
 Product-Version: 24
 Product-Version-Maximum: 99
 Plugins: Python
