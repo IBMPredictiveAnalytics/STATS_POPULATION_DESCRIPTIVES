@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Extension xmlns="http://spss.com/clementine/extensions" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" debug="false" version="1.0" xsi:schemaLocation="http://spss.com/clementine/extensions http://xml.spss.com/clementine/extensions/CLEFSpecificationFile.xsd">
+  <ExtensionDetails copyright="Licensed Materials - Property of IBM.  IBM SPSS Products: Statistics Common (C) Copyright IBM Corp. 1989, 2020.  US Government Users Restricted Rights - Use, duplication or  disclosure restricted by GSA ADP Schedule Contract with IBM Corp." description="" id="Population_Descriptives" label="" provider="SPSS, Inc." providerTag="spss" version="1.0"/>
+  <Resources>
+    <Bundle id="bundle202" path="Population_Descriptives" type="properties"/>
+  </Resources>
+  <CommonObjects>
+    <Actions>
+      <Action id="Population_Descriptives_action" imagePath="IBMdialogicon.png" label="Population Descriptives" labelKey="Population_Descriptives_action.LABEL"/>
+    </Actions>
+  </CommonObjects>
+  <UserInterface>
+    <Controls>
+      <MenuItem action="Population_Descriptives_action" actionIDToName="" installToGlobalCustomMenu="false" menuFrame="all" menuVersion="-1" offset="2" previousId="analyze_desc_stat_descriptive" showIcon="true" spssMenu="Analyze.analyze_desc_stat"/>
+    </Controls>
+  </UserInterface>
+  <Node id="Population_Descriptives" label="Population Descriptives" labelKey="Population_Descriptives.LABEL" type="modelBuilder">
+    <Properties>
+      <Property name="Population_Descriptives" syntax="PRESERVE.&#10;begin program python3.&#10;import tempfile, spss, random, spssaux&#10;try:&#10;    tempdir = tempfile.gettempdir()&#10;    spss.Submit(r&quot;&quot;&quot;CD &quot;%s&quot;.&quot;&quot;&quot; % tempdir)&#10;    spss.Submit(&quot;&quot;&quot;SET PRINTBACK=OFF MPRINT=OFF.&quot;&quot;&quot;)&#10;    activeds = spss.ActiveDataset()&#10;    if activeds == &quot;*&quot;:&#10;        activeds = &quot;D&quot; + str(random.random())&#10;        spss.Submit(&quot;DATASET NAME %s&quot; % activeds)&#10;    spss.Submit(r&quot;&quot;&quot;&#10;SPLIT FILE OFF.&#10;OMS&#10;  /SELECT ALL&#10;  /IF COMMANDS=['Descriptives']&#10;  /DESTINATION VIEWER=NO.&#10;OMS&#10;  /SELECT TABLES&#10;  /IF COMMANDS=['Descriptives'] SUBTYPES=['Descriptive Statistics']&#10;  /DESTINATION FORMAT=SAV NUMBERED=TableNumber_&#10;   OUTFILE='PD_temp'.&#10;DATASET DECLARE PD_temp WINDOW=HIDDEN.&#10;DESCRIPTIVES VARIABLES=%%variables%%&#10;  /STATISTICS=MEAN STDDEV VARIANCE.&#10;OMSEND.&#10;DATASET ACTIVATE PD_temp WINDOW=ASIS.&#10;COMPUTE Std.Deviation=Std.Deviation*SQRT((N-1)/N).&#10;COMPUTE Variance=Variance*((N-1)/N).&#10;VARIABLE LABELS Var1 ' '.&#10;OMS&#10;  /SELECT ALL&#10;  /IF COMMANDS=['Alter Type']&#10;  /DESTINATION VIEWER=NO&#10;  /TAG = 'PD_NoATO'.&#10;ALTER TYPE N (A14)&#10;  /PRINT NONE.&#10;OMSEND TAG=['PD_NoATO'].&#10;DELETE VARIABLES TableNumber_ TO Label_.&#10;OMS&#10;  /SELECT TABLES&#10;  /IF COMMANDS=['Population Descriptives'] SUBTYPES=['Notes']&#10;  /DESTINATION VIEWER=NO&#10;  /TAG = 'PD_NoNotes'.&#10;OMS&#10;  /SELECT TEXTS&#10;  /IF COMMANDS=['Population Descriptives'] LABELS=['Active Dataset']&#10;  /DESTINATION VIEWER=NO&#10;  /TAG = 'PD_NoDSN'.&#10;&quot;&quot;&quot;)&#10;    from spss import CellText&#10;    rlabels=[]&#10;    data=[]&#10;    cur=spss.Cursor()&#10;    for i in range(0,spss.GetCaseCount()):&#10;        datarow=cur.fetchone()&#10;        data.append(datarow[1:])&#10;        rlabels.append(datarow[0])&#10;    cur.close()&#10;    def _flatten(seq):&#10;        for item in seq:&#10;            if spssaux._isseq(item):&#10;                for subitem in _flatten(item):&#10;                    yield subitem&#10;            else:&#10;                yield item&#10;    data=[item for item in _flatten(data)]&#10;    def _blank(seq):&#10;        for item in seq:&#10;            if item is None:&#10;                yield ' '&#10;            else:&#10;                yield item&#10;    data=[item for item in _blank(data)]&#10;    caption=(&quot;Std. Deviation and Variance use N rather than N-1 in denominators.&quot;)&#10;    spss.StartProcedure(&quot;Population Descriptives&quot;)&#10;    table1=spss.BasePivotTable(&quot;Population Descriptive Statistics&quot;,&#10;                                &quot;Population Descriptive Statistics&quot;,caption=caption)&#10;    rowlabels=[(CellText.String(rlabels[i])) for i in range(len(rlabels))]&#10;    collabels=[spss.GetVariableLabel(1),spss.GetVariableLabel(2),spss.GetVariableLabel(3), \&#10;                spss.GetVariableLabel(4)]&#10;    table1.SimplePivotTable(rowdim=&quot;&quot;&quot; &quot;&quot;&quot;,&#10;                rowlabels=rowlabels,&#10;                coldim=&quot;&quot;,&#10;                collabels=collabels,&#10;                cells=data)&#10;    spss.EndProcedure()&#10;finally:&#10;    try:&#10;        spss.Submit(&quot;&quot;&quot;&#10;OMSEND TAG=['PD_NoNotes'].&#10;OMSEND TAG=['PD_NoDSN'].&#10;DATASET CLOSE PD_temp.&#10;DATASET ACTIVATE %s WINDOW=ASIS&#10;&quot;&quot;&quot; % activeds)&#10;    except:&#10;        pass&#10;end program.&#10;RESTORE.&#10;"/>
+      <Property description="false" name="Population_Descriptives_modal"/>
+      <Property description="" descriptionKey="source_vars_tooltip.LABEL" isList="true" label="" labelKey="source_vars.LABEL" name="source_vars" selectionPool="source_fields" syntax="%%ThisValue%%" valueType="field"/>
+      <Property description="" descriptionKey="variables_tooltip.LABEL" isList="true" isRequired="true" label="Variable(s):" labelKey="variables.LABEL" name="variables" selectionPool="source_fields" syntax="%%ThisValue%%" valueType="field"/>
+      <Property defaultValue="item_21_a" description="" descriptionKey="missing_tooltip.LABEL" label="Delete Missing Data" labelKey="missing.LABEL" name="missing" syntax="%%ThisValue%%" valueType="enum">
+        <Enumeration>
+          <Enum description="First radio button" descriptionKey="item_21_a_tooltip.LABEL" hasSubGroup="false" label="By Variable" labelKey="item_21_a.LABEL" syntax="VARIABLE" value="item_21_a"/>
+          <Enum description="Second radio button" descriptionKey="item_21_b_tooltip.LABEL" hasSubGroup="false" label="Listwise" labelKey="item_21_b.LABEL" syntax="LISTWISE" value="item_21_b"/>
+        </Enumeration>
+      </Property>
+    </Properties>
+    <SelectionPool id="source_fields" type="fields"/>
+    <UserInterface>
+      <Tabs>
+        <Tab helpLink="STATS_POPULATION_DESCRIPTIVES.htm">
+          <PropertiesPanel>
+            <SourceFieldsBrowser copyFields="false" property="source_vars" selectionPool="source_fields" storage="[real integer]">
+              <Layout columnWeight="1.0" fill="both" gridColumn="0" gridRow="0" gridWidth="1" rowWeight="1.0"/>
+            </SourceFieldsBrowser>
+            <MultiFieldChooserControl mnemonic="V" mnemonicKey="variables_mnemonic.VALUE" property="variables" storage="[real integer]">
+              <Layout columnWeight="1.0" fill="both" gridColumn="2" gridRow="0" gridWidth="1" rowWeight="1.0"/>
+            </MultiFieldChooserControl>
+            <RadioButtonGroupControl property="missing" rows="2" useSubPanel="false">
+              <Layout columnWeight="1.0" fill="both" gridColumn="2" gridRow="1" gridWidth="1" rowWeight="1.0"/>
+              <RadioButton property="item_21_a"/>
+              <RadioButton property="item_21_b"/>
+            </RadioButtonGroupControl>
+            <StaticText text="This dialog was created using a later version of IBM SPSS Statistics\nand certain features may not function as intended." textKey="v17_warning.LABEL">
+              <Layout columnWeight="1.0" fill="horizontal" gridColumn="0" gridRow="1" gridWidth="1" rowWeight="1.0"/>
+            </StaticText>
+          </PropertiesPanel>
+        </Tab>
+      </Tabs>
+    </UserInterface>
+  </Node>
+</Extension>
