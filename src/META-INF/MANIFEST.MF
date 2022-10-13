@@ -1,4 +1,5 @@
 Name: STATS POPULATION DESCRIPTIVES
+Display-Name: Population Descriptive Statistics
 Dialog-Specs: STATS_POPULATION_DESCRIPTIVES.spd
 Misc-Files: extsyntax.css
 Summary:  Descriptive Statistics for a Population
