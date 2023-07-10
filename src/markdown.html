@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=9" >
+
+<title>STATS MAKE CASES Extension Command</title>
+
+<link rel="stylesheet" type="text/css" href="extsyntax.css" />
+
+</head>
+
+<body>
+<h1>STATS POP DESCRIPTIVES</h1>
+
+<p>Generate Descriptive Statistics for a Population</p>
+<div class="syntax">
+<p>STATS POP DESCRIPTIVES<br/> 
+VARIABLES = list of variable names<sup>&#42;</sup><br/>
+MISSING = VARIABLE<sup>&#42;&#42;</sup> or LISTWISE<br/>
+</p>
+
+<p><sup>&#42;</sup> Required<br/>
+<sup>&#42;&#42;</sup> Default</p>
+</div>
+<p>STATS POP DESCRIPTIVES /HELP prints this information and does nothing else.</p>
+
+<pre class="example"><code>STATS POP DESCRIPTIVES X Y Z1 TO Z10.
+</code></pre>
+
+<p>String variables will be automatically excluded.</p>
+<p>The output includes N, min, max, mean, standard deviation, and variance.</p>
+<p>The values will be the same as for the DESCRIPTIVES procedure except that
+the standard deviation and variable use N as the denominator instead of N-1.</p>
+
+<p>&copy; Copyright Jon K Peck, 2023</p>
+
+</body>
+
+</html>
+
