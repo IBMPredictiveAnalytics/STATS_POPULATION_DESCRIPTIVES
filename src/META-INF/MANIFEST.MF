@@ -9,7 +9,7 @@ Description: This procedure calculates descriptive stats assuming a po
  is N, not N-1.  It is a rewrite of the older Population Descriptive S
  tatistics custom dialog box.
 Author: Jon K P:eck
-Version: 2.0.4
+Version: 2.0.5
 Product-Version: 24
 Date: 6/26/2023
 Categories: population descriptives
