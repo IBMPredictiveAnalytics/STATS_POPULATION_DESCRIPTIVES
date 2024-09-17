@@ -1,5 +1,5 @@
 Name: STATS_POP_DESCRIPTIVES
-Display-name: Population Descriptives
+Display-Name: Population Descriptives
 Dialog-Specs: PopulationDes.cfe
 Command-Specs: STATS_POP_DESCRIPTIVES.xml
 Code-Files: STATS_POP_DESCRIPTIVES.py
